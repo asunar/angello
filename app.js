@@ -1,5 +1,18 @@
 var myModule = angular.module('Angello', []);
 
+
+myModule.factory('angelloHelper', function() {
+    var buildIndex = function(source, property) {
+        var tempArray = [];
+        for(var i = 0, len = source.length; i < len; ++i) {
+            tempArray[source[i][property]] = source[i];
+}
+        return tempArray;
+    };
+    return {
+        buildIndex: buildIndex
+}; });
+
 myModule.controller('MainCtrl', function  ($scope) {
   var newStory = {title: 'New Story', description:'Description pending.' };
   $scope.createStory = function() {
@@ -40,6 +53,7 @@ myModule.controller('MainCtrl', function  ($scope) {
           {name:'Spike'}
           ];
           
+  //Helper function to find object in array.
   var buildIndex = function(source, property) {
       var tempArray = [];
       for(var i = 0, len = source.length; i < len; ++i) {
@@ -49,11 +63,23 @@ myModule.controller('MainCtrl', function  ($scope) {
   };
     $scope.typesIndex = buildIndex($scope.types, 'name');
     $scope.statusesIndex = buildIndex($scope.statuses, 'name');
+
     $scope.setCurrentStory = function(story) {
-        $scope.currentStory = story;
-        $scope.currentStatus = $scope.statusesIndex[story.status];
-        $scope.currentType = $scope.typesIndex[story.type];
-        console.log("Current Story is " + $scope.currentStory.title);
+      $scope.currentStory = story;
+      $scope.currentStatus = $scope.statusesIndex[story.status];
+      $scope.currentType = $scope.typesIndex[story.type];
+      console.log("Current Story is " + $scope.currentStory.title);
 
     };          
+
+    $scope.setCurrentStatus = function(status) {
+            if(typeof $scope.currentStory !== 'undefined') {
+                $scope.currentStory.status = status.name;
+            }
+    };
+        $scope.setCurrentType = function(type) {
+            if(typeof $scope.currentStory !== 'undefined') {
+                $scope.currentStory.type = type.name;
+            }
+    };    
 });
